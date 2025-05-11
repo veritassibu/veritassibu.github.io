@@ -318,31 +318,30 @@
                     jsonData[key] = value;
                 });
                 
-                // Send data to Google Apps Script
+                // Send data to Google Apps Script using no-cors mode
                 const response = await fetch(scriptUrl, {
                     method: 'POST',
                     body: JSON.stringify(jsonData),
                     headers: {
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    mode: 'no-cors' // Using no-cors mode as requested
                 });
                 
-                const result = await response.json();
+                // With no-cors, we can't read the response content
+                // So we'll always assume success if the fetch didn't throw an error
+                console.log('Form submitted in no-cors mode');
                 
-                if (result.success) {
-                    // Show success message
-                    document.getElementById('loading').style.display = 'none';
-                    document.getElementById('success').style.display = 'block';
-                    document.getElementById('claimForm').reset();
-                } else {
-                    throw new Error(result.message || 'Unknown error occurred');
-                }
+                // Show success message
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('success').style.display = 'block';
+                document.getElementById('claimForm').reset();
             } catch (error) {
                 console.error('Error submitting form:', error);
                 // Show error message
                 document.getElementById('loading').style.display = 'none';
                 document.getElementById('error').style.display = 'block';
-                document.getElementById('errorMessage').textContent = error.message || 'Failed to submit the form. Please try again.';
+                document.getElementById('errorMessage').textContent = 'Network error occurred. Your form may or may not have been submitted.';
             }
         });
     </script>
