@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claims Portal</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+        .file-upload {
+            margin-top: 5px;
+            position: relative;
+        }
+        .file-upload input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+        .section-title {
+            margin-top: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eaeaea;
+            color: #2980b9;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .btn-submit {
+            background-color: #27ae60;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .btn-submit:hover {
+            background-color: #219653;
+        }
+        .checkbox-group {
+            margin-top: 10px;
+        }
+        .checkbox-group label {
+            font-weight: normal;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .checkbox-container input {
+            margin-top: 5px;
+            margin-right: 10px;
+        }
+        #loading, #success, #error {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+        }
+        #loading {
+            background-color: #f9f9f9;
+        }
+        #success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        #error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .required:after {
+            content: " *";
+            color: #e74c3c;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Claims Submission Portal</h1>
+        
+        <form id="claimForm">
+            <!-- User Information -->
+            <h2 class="section-title">Personal Information</h2>
+            <div class="form-group">
+                <label for="fullName" class="required">Full Name</label>
+                <input type="text" id="fullName" name="fullName" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="email" class="required">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone" class="required">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="userId">User ID/Account Number (if applicable)</label>
+                <input type="text" id="userId" name="userId">
+            </div>
+            
+            <!-- Claim Details -->
+            <h2 class="section-title">Claim Details</h2>
+            <div class="form-group">
+                <label for="claimType" class="required">Claim Type</label>
+                <select id="claimType" name="claimType" required>
+                    <option value="">-- Select Claim Type --</option>
+                    <option value="Medical">Medical</option>
+                    <option value="Property Damage">Property Damage</option>
+                    <option value="Travel">Travel</option>
+                    <option value="Equipment">Equipment</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="claimDate" class="required">Date of Incident</label>
+                <input type="date" id="claimDate" name="claimDate" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="claimAmount" class="required">Claim Amount ($)</label>
+                <input type="number" id="claimAmount" name="claimAmount" step="0.01" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="claimDescription" class="required">Claim Description</label>
+                <textarea id="claimDescription" name="claimDescription" required></textarea>
+            </div>
+            
+            <!-- Supporting Documentation -->
+            <h2 class="section-title">Supporting Documentation</h2>
+            <div class="form-group">
+                <label for="fileUpload" class="required">Upload Documents (receipts, photos, reports)</label>
+                <div class="file-upload">
+                    <input type="file" id="fileUpload" name="fileUpload" multiple required>
+                </div>
+                <small>You can select multiple files. Max file size: 10MB each.</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="documentDescription">Document Description</label>
+                <textarea id="documentDescription" name="documentDescription" placeholder="Please describe the uploaded documents..."></textarea>
+            </div>
+            
+            <!-- Terms and Declarations -->
+            <h2 class="section-title">Terms and Declarations</h2>
+            <div class="checkbox-group">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="termsAgreement" name="termsAgreement" required>
+                    <label for="termsAgreement" class="required">I agree to the terms and conditions of this claims process.</label>
+                </div>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="truthDeclaration" name="truthDeclaration" required>
+                    <label for="truthDeclaration" class="required">I declare that the information provided in this claim is true and accurate to the best of my knowledge.</label>
+                </div>
+                
+                <div class="checkbox-container">
+                    <input type="checkbox" id="dataConsent" name="dataConsent" required>
+                    <label for="dataConsent" class="required">I consent to the processing of my personal data for the purpose of handling this claim.</label>
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-submit">Submit Claim</button>
+        </form>
+        
+        <div id="loading">
+            <p>Processing your claim submission...</p>
+        </div>
+        
+        <div id="success">
+            <h3>Claim Submitted Successfully!</h3>
+            <p>Your claim reference number: <span id="referenceNumber"></span></p>
+            <p>Thank you for your submission. We will review your claim and contact you shortly.</p>
+        </div>
+        
+        <div id="error">
+            <h3>Error Submitting Claim</h3>
+            <p id="errorMessage"></p>
+            <p>Please try again or contact support for assistance.</p>
+        </div>
+    </div>
+
+    <script>
+        // Generate a unique reference number
+        function generateReferenceNumber() {
+            const timestamp = new Date().getTime().toString().slice(-6);
+            const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+            return `CLM-${timestamp}-${random}`;
+        }
+        
+        document.getElementById('claimForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Show loading indicator
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('success').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            
+            // Generate reference number
+            const referenceNumber = generateReferenceNumber();
+            document.getElementById('referenceNumber').textContent = referenceNumber;
+            
+            try {
+                // Collect form data
+                const formData = new FormData(this);
+                formData.append('referenceNumber', referenceNumber);
+                formData.append('submissionTime', new Date().toISOString());
+                
+                // Replace this URL with your Google Apps Script web app URL after deployment
+                const scriptUrl = 'https://script.google.com/macros/s/AKfycbzAm3iPbyyPimLsY5kQTlxZTQlOPG_TR_IRMGOiXXcTCJBUv4ZCfRf3LPvqT1OflQr-/exec';
+                
+                // Handle file uploads
+                const fileInput = document.getElementById('fileUpload');
+                const files = fileInput.files;
+                
+                // Process files if any
+                if (files.length > 0) {
+                    // Convert files to base64 for transmission
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+                        const reader = new FileReader();
+                        
+                        // Use a promise to handle asynchronous file reading
+                        await new Promise((resolve, reject) => {
+                            reader.onload = function() {
+                                // Get base64 data without the prefix
+                                const base64Data = reader.result.split(',')[1];
+                                formData.append(`file_${i}_name`, file.name);
+                                formData.append(`file_${i}_type`, file.type);
+                                formData.append(`file_${i}_data`, base64Data);
+                                resolve();
+                            };
+                            reader.onerror = reject;
+                            reader.readAsDataURL(file);
+                        });
+                    }
+                    
+                    formData.append('fileCount', files.length);
+                }
+                
+                // Convert FormData to a plain object for JSON transmission
+                const formObject = {};
+                formData.forEach((value, key) => {
+                    // Don't include file data in this log to avoid huge console output
+                    if (!key.includes('file_') || key.includes('_name') || key.includes('_type')) {
+                        formObject[key] = value;
+                    } else if (key.includes('file_')) {
+                        formObject[key] = '[BASE64_DATA]';
+                    }
+                });
+                
+                console.log('Submitting form data:', formObject);
+                
+                // Submit data as JSON
+                const jsonData = {};
+                formData.forEach((value, key) => {
+                    jsonData[key] = value;
+                });
+                
+                // Send data to Google Apps Script
+                const response = await fetch(scriptUrl, {
+                    method: 'POST',
+                    body: JSON.stringify(jsonData),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Show success message
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('success').style.display = 'block';
+                    document.getElementById('claimForm').reset();
+                } else {
+                    throw new Error(result.message || 'Unknown error occurred');
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                // Show error message
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('errorMessage').textContent = error.message || 'Failed to submit the form. Please try again.';
+            }
+        });
+    </script>
+</body>
+</html>
